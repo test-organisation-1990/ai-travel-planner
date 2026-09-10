@@ -777,6 +777,204 @@ def render_project_architecture():
         """
     )
 
+# =========================================================
+# TECHNOLOGY STACK
+# =========================================================
+
+def render_requirement_placehoder():
+
+    st.html(
+        """
+        <style>
+        .trip-card {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 20px;
+            margin-top: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .trip-card-title {
+            font-size: 21px;
+            font-weight: 700;
+            text-align: center;
+            color: #1f2937;
+            margin-bottom: 18px;
+        }
+
+        .trip-step {
+            display: flex;
+            gap: 12px;
+            padding: 12px;
+            margin-bottom: 10px;
+            background: #f8fafc;
+            border-radius: 10px;
+            border-left: 3px solid #6366f1;
+        }
+
+        .trip-number {
+            min-width: 30px;
+            height: 30px;
+            background: #6366f1;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .trip-content {
+            flex: 1;
+        }
+
+        .trip-step-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 3px;
+        }
+
+        .trip-step-description {
+            font-size: 12px;
+            line-height: 1.5;
+            color: #6b7280;
+        }
+
+        .trip-tech {
+            display: inline-block;
+            margin-top: 6px;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: #eef2ff;
+            color: #4f46e5;
+            font-size: 10px;
+            font-weight: 600;
+        }
+        </style>
+
+        <div class="trip-card">
+
+            <div class="trip-card-title">
+                ✈️ How Our Trip Planner Works
+            </div>
+
+            <div class="trip-step">
+                <div class="trip-number">1</div>
+                <div class="trip-content">
+                    <div class="trip-step-title">
+                        🧠 Understand User Requirements
+                    </div>
+                    <div class="trip-step-description">
+                        Extract the destination and travel requirements from
+                        the user's query using an LLM and validate the input.
+                    </div>
+                    <span class="trip-tech">OpenAI LLM</span>
+                </div>
+            </div>
+
+            <div class="trip-step">
+                <div class="trip-number">2</div>
+                <div class="trip-content">
+                    <div class="trip-step-title">
+                        📍 Find Destination Location
+                    </div>
+                    <div class="trip-step-description">
+                        Retrieve the destination's latitude and longitude
+                        using the Nominatim geocoding API.
+                    </div>
+                    <span class="trip-tech">
+                        OpenStreetMap · Nominatim
+                    </span>
+                </div>
+            </div>
+
+            <div class="trip-step">
+                <div class="trip-number">3</div>
+                <div class="trip-content">
+                    <div class="trip-step-title">
+                        🗺️ Discover Tourist Places
+                    </div>
+                    <div class="trip-step-description">
+                        Search for nearby tourist attractions and points
+                        of interest around the destination.
+                    </div>
+                    <span class="trip-tech">
+                        OpenStreetMap · Overpass
+                    </span>
+                </div>
+            </div>
+
+            <div class="trip-step">
+                <div class="trip-number">4</div>
+                <div class="trip-content">
+                    <div class="trip-step-title">
+                        📖 Retrieve Travel Information
+                    </div>
+                    <div class="trip-step-description">
+                        Fetch additional information about tourist places
+                        to enrich the travel recommendations.
+                    </div>
+                    <span class="trip-tech">
+                        Wikivoyage · RAG
+                    </span>
+                </div>
+            </div>
+
+            <div class="trip-step">
+                <div class="trip-number">5</div>
+                <div class="trip-content">
+                    <div class="trip-step-title">
+                        ✨ Generate Travel Itinerary
+                    </div>
+                    <div class="trip-step-description">
+                        Combine the user's requirements with the collected
+                        information to generate a structured itinerary.
+                    </div>
+                    <span class="trip-tech">
+                        LangGraph · OpenAI
+                    </span>
+                </div>
+            </div>
+
+            <div class="trip-step">
+                <div class="trip-number">6</div>
+                <div class="trip-content">
+                    <div class="trip-step-title">
+                        🌍 Visualize on Interactive Map
+                    </div>
+                    <div class="trip-step-description">
+                        Display recommended tourist locations on an
+                        interactive map with pin markers.
+                    </div>
+                    <span class="trip-tech">
+                        PyDeck
+                    </span>
+                </div>
+            </div>
+
+            <div class="trip-step" style="margin-bottom: 0;">
+                <div class="trip-number">7</div>
+                <div class="trip-content">
+                    <div class="trip-step-title">
+                        💾 Store History & Feedback
+                    </div>
+                    <div class="trip-step-description">
+                        Store user queries, generated responses and feedback
+                        in PostgreSQL for future reference and optimization.
+                    </div>
+                    <span class="trip-tech">
+                        PostgreSQL · Supabase
+                    </span>
+                </div>
+            </div>
+
+        </div>
+        """
+    )
 
 # =========================================================
 # TECHNOLOGY STACK
@@ -843,6 +1041,8 @@ left_col, right_col = st.columns(
 with right_col:
 
     flow_placeholder = st.empty()
+    
+    requirement_placehoder = st.empty()
 
     technology_placeholder = st.empty()
 
@@ -854,6 +1054,10 @@ with right_col:
 with flow_placeholder.container():
 
     render_agent_flow()
+
+with requirement_placehoder.container():
+    
+    render_requirement_placehoder()
 
 with technology_placeholder.container():
 
