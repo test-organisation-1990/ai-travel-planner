@@ -47,14 +47,39 @@ def _call_overpass(query: str):
 def find_pois(latitude: float, longitude: float) -> list[dict]:
 
     query = f"""
-    [out:json];
-    (
-      node["tourism"](around:10000,{latitude},{longitude});
-      way["tourism"](around:10000,{latitude},{longitude});
-      relation["tourism"](around:10000,{latitude},{longitude});
-    );
-    out center;
-    """
+        [out:json][timeout:120];
+
+        (
+        node(around:125000,{latitude},{longitude})
+            ["tourism"];
+
+        way(around:125000,{latitude},{longitude})
+            ["tourism"];
+
+        relation(around:125000,{latitude},{longitude})
+            ["tourism"];
+
+        node(around:125000,{latitude},{longitude})
+            ["natural"~"beach|waterfall|peak|cave|spring"];
+
+        way(around:125000,{latitude},{longitude})
+            ["natural"~"beach|waterfall|peak|cave|spring"];
+
+        node(around:125000,{latitude},{longitude})
+            ["historic"~"monument|castle|fort|archaeological_site"];
+
+        way(around:125000,{latitude},{longitude})
+            ["historic"~"monument|castle|fort|archaeological_site"];
+
+        node(around:125000,{latitude},{longitude})
+            ["leisure"~"park|garden|nature_reserve"];
+
+        way(around:125000,{latitude},{longitude})
+            ["leisure"~"park|garden|nature_reserve"];
+        );
+
+        out center tags;
+        """
 
     data = _call_overpass(query)
 

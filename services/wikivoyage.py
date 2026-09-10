@@ -1,21 +1,17 @@
 import requests
-import os
 from langchain_core.documents import Document
 from langchain_openai import OpenAIEmbeddings
 from langchain_chroma import Chroma
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from dotenv import load_dotenv
-
-load_dotenv()
-
+import streamlit as st
 
 # ---------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------
 
-WIKIVOYAGE_API_URL = os.getenv("WIKIVOYAGE_API_URL")
-CHROMA_DIRECTORY = os.getenv("CHROMA_DIRECTORY")
-COLLECTION_NAME = os.getenv("COLLECTION_NAME")
+WIKIVOYAGE_API_URL = st.secrets["WIKIVOYAGE_API_URL"]
+CHROMA_DIRECTORY = st.secrets["CHROMA_DIRECTORY"]
+COLLECTION_NAME = st.secrets["COLLECTION_NAME"]
 
 
 # ---------------------------------------------------------

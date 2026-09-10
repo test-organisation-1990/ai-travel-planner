@@ -1,11 +1,11 @@
 import httpx
-from dotenv import load_dotenv
-import os
+import streamlit as st
 
-load_dotenv()
-NOMINATIM_URL = os.getenv("NOMINATIM_URL")
+NOMINATIM_URL = st.secrets["NOMINATIM_URL"]
 
+@st.cache_data(ttl=86400)
 def geocode(destination: str) -> dict:
+
     params = {
         "q": destination,
         "format": "json",
@@ -20,7 +20,7 @@ def geocode(destination: str) -> dict:
         NOMINATIM_URL,
         params=params,
         headers=headers,
-        timeout=10,
+        timeout=5,
     )
 
     response.raise_for_status()
@@ -37,4 +37,3 @@ def geocode(destination: str) -> dict:
         "longitude": float(place["lon"]),
         "display_name": place["display_name"],
     }
- 

@@ -10,7 +10,7 @@ from langgraph.graph import StateGraph, START, END
 graph = StateGraph(TravelState)
 
 graph.add_node("user_intent", user_intent)
-graph.add_node("nominatim__tool", nominatim_over_tool)
+graph.add_node("nominatim_tool", nominatim_over_tool)
 graph.add_node("overpass_tool", overpass_tool)
 graph.add_node("itenatanory_tool", itenatanory_tool)
 graph.add_node("wikivoyage_rag_node", wikivoyage_rag_node)
@@ -21,13 +21,13 @@ graph.add_conditional_edges(
     "user_intent",
     validate_errors,
     {
-        "success": "nominatim__tool",
+        "success": "nominatim_tool",
         "error": END
     }
 )
 
 graph.add_conditional_edges(
-    "nominatim__tool",
+    "nominatim_tool",
     validate_errors,
     {
         "success": "overpass_tool",
@@ -56,8 +56,8 @@ graph.add_conditional_edges(
 graph.add_edge("itenatanory_tool", END)
 
 """ graph.add_edge(START, "user_intent")
-graph.add_edge("user_intent", "nominatim__tool")
-graph.add_edge("nominatim__tool", "overpass_tool")
+graph.add_edge("user_intent", "nominatim_tool")
+graph.add_edge("nominatim_tool", "overpass_tool")
 graph.add_edge("overpass_tool", "wikivoyage_rag_node")
 graph.add_edge("wikivoyage_rag_node", "itenatanory_tool")
 graph.add_edge("itenatanory_tool", END) """
