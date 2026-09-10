@@ -1,10 +1,15 @@
 import time
-
 import httpx
+
 from tenacity import retry, stop_after_attempt, wait_exponential
 
 
-OVERPASS_URL = "https://overpass-api.de/api/interpreter"
+# Primary + fallback Overpass endpoints
+OVERPASS_URLS = [
+    "https://overpass-api.de/api/interpreter",
+    "https://overpass.kumi.systems/api/interpreter",
+]
+
 
 # Wait between our own requests so we don't hit Overpass too frequently.
 _last_request_time = 0
@@ -30,18 +35,31 @@ def _call_overpass(query: str):
         "User-Agent": "TripPlannerAI/1.0"
     }
 
-    response = httpx.post(
-        OVERPASS_URL,
-        data={"data": query},
-        headers=headers,
-        timeout=60,
-    )
+    last_error = None
 
-    _last_request_time = time.time()
+    for overpass_url in OVERPASS_URLS:
 
-    response.raise_for_status()
+        try:
 
-    return response.json()
+            response = httpx.post(
+                overpass_url,
+                data={"data": query},
+                headers=headers,
+                timeout=150,
+            )
+
+            _last_request_time = time.time()
+
+            response.raise_for_status()
+
+            return response.json()
+
+        except (httpx.ConnectError, httpx.ConnectTimeout) as e:
+
+            last_error = e
+            continue
+
+    raise last_error
 
 
 def find_pois(latitude: float, longitude: float) -> list[dict]:
@@ -50,36 +68,31 @@ def find_pois(latitude: float, longitude: float) -> list[dict]:
         [out:json][timeout:120];
 
         (
-        node(around:125000,{latitude},{longitude})
-            ["tourism"];
+            node(around:45000,{latitude},{longitude})["tourism"];
+            way(around:45000,{latitude},{longitude})["tourism"];
+            relation(around:45000,{latitude},{longitude})["tourism"];
 
-        way(around:125000,{latitude},{longitude})
-            ["tourism"];
+            node(around:45000,{latitude},{longitude})
+                ["natural"~"beach|waterfall|peak|cave|spring"];
 
-        relation(around:125000,{latitude},{longitude})
-            ["tourism"];
+            way(around:45000,{latitude},{longitude})
+                ["natural"~"beach|waterfall|peak|cave|spring"];
 
-        node(around:125000,{latitude},{longitude})
-            ["natural"~"beach|waterfall|peak|cave|spring"];
+            node(around:45000,{latitude},{longitude})
+                ["historic"~"monument|castle|fort|archaeological_site"];
 
-        way(around:125000,{latitude},{longitude})
-            ["natural"~"beach|waterfall|peak|cave|spring"];
+            way(around:45000,{latitude},{longitude})
+                ["historic"~"monument|castle|fort|archaeological_site"];
 
-        node(around:125000,{latitude},{longitude})
-            ["historic"~"monument|castle|fort|archaeological_site"];
+            node(around:45000,{latitude},{longitude})
+                ["leisure"~"park|garden|nature_reserve"];
 
-        way(around:125000,{latitude},{longitude})
-            ["historic"~"monument|castle|fort|archaeological_site"];
-
-        node(around:125000,{latitude},{longitude})
-            ["leisure"~"park|garden|nature_reserve"];
-
-        way(around:125000,{latitude},{longitude})
-            ["leisure"~"park|garden|nature_reserve"];
+            way(around:45000,{latitude},{longitude})
+                ["leisure"~"park|garden|nature_reserve"];
         );
 
         out center tags;
-        """
+    """
 
     data = _call_overpass(query)
 
@@ -88,6 +101,7 @@ def find_pois(latitude: float, longitude: float) -> list[dict]:
     for element in data.get("elements", []):
 
         tags = element.get("tags", {})
+
         name = tags.get("name:en")
 
         if not name:
