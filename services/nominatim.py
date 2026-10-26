@@ -13,7 +13,7 @@ def geocode(destination: str) -> dict:
     }
 
     headers = {
-        "User-Agent": "trip-planner-ai/1.0"
+        "User-Agent": "AITravelPlanner/1.0 (gupta161990@gmail.com)"
     }
 
     response = httpx.get(
