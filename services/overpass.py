@@ -68,26 +68,26 @@ def find_pois(latitude: float, longitude: float) -> list[dict]:
         [out:json][timeout:120];
 
         (
-            node(around:18000,{latitude},{longitude})["tourism"];
-            way(around:18000,{latitude},{longitude})["tourism"];
-            relation(around:18000,{latitude},{longitude})["tourism"];
+            node(around:12000,{latitude},{longitude})["tourism"];
+            way(around:12000,{latitude},{longitude})["tourism"];
+            relation(around:12000,{latitude},{longitude})["tourism"];
 
-            node(around:18000,{latitude},{longitude})
+            node(around:12000,{latitude},{longitude})
                 ["natural"~"beach|waterfall|peak|cave|spring"];
 
-            way(around:18000,{latitude},{longitude})
+            way(around:12000,{latitude},{longitude})
                 ["natural"~"beach|waterfall|peak|cave|spring"];
 
-            node(around:18000,{latitude},{longitude})
+            node(around:12000,{latitude},{longitude})
                 ["historic"~"monument|castle|fort|archaeological_site"];
 
-            way(around:18000,{latitude},{longitude})
+            way(around:12000,{latitude},{longitude})
                 ["historic"~"monument|castle|fort|archaeological_site"];
 
-            node(around:18000,{latitude},{longitude})
+            node(around:12000,{latitude},{longitude})
                 ["leisure"~"park|garden|nature_reserve"];
 
-            way(around:18000,{latitude},{longitude})
+            way(around:12000,{latitude},{longitude})
                 ["leisure"~"park|garden|nature_reserve"];
         );
 
